@@ -59,6 +59,19 @@
 			onChange(mq);
 		}
 
+		// Keep the active category in view when the rail is taller than the
+		// viewport. Scrolls only the rail's own scroll box, never the page.
+		if (sidebar) {
+			var active = qs('.cm-rail__toggle.is-active, .cm-rail__link.is-active, .cm-rail__sub a.is-active', sidebar);
+			if (active) {
+				var r = sidebar.getBoundingClientRect();
+				var a = active.getBoundingClientRect();
+				if (a.top < r.top + 56 || a.bottom > r.bottom) {
+					sidebar.scrollTop += (a.top - r.top) - 96;
+				}
+			}
+		}
+
 		// Search bar toggle
 		var searchToggle = qs('#cm-search-toggle');
 		var searchBar = qs('#cm-searchbar');

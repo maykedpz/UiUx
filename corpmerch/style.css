@@ -1908,6 +1908,9 @@ img { max-width: 100%; height: auto; display: block; }
 	box-shadow: inset 2px 0 0 var(--cm-accent-bright);
 }
 
+/* Matching highlight in the footer Shop column */
+.cm-footer__links a.is-active { color: var(--cm-accent-bright); font-weight: 700; }
+
 .cm-rail__foot {
 	margin-top: auto;
 	padding: var(--cm-space-4) var(--cm-space-5) var(--cm-space-6);

@@ -85,6 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 			<?php
 			// Shop column — top-level categories (reuses the homepage pinned order).
 			$cm_shop_html = '';
+			$cm_fa        = function_exists( 'corpmerch_active_category' ) ? corpmerch_active_category() : array( 'term' => 0, 'top' => 0, 'shop' => false );
 			if ( function_exists( 'corpmerch_home_categories' ) ) {
 				$cm_cats = corpmerch_home_categories();
 				$cm_n    = 0;
@@ -92,10 +93,11 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 					if ( $cm_n++ >= 8 ) {
 						break;
 					}
-					$cm_shop_html .= '<li><a href="' . esc_url( get_term_link( $cm_c ) ) . '">' . esc_html( $cm_c->name ) . '</a></li>';
+					$cm_c_active   = ( (int) $cm_c->term_id === (int) $cm_fa['top'] );
+					$cm_shop_html .= '<li><a' . ( $cm_c_active ? ' class="is-active" aria-current="page"' : '' ) . ' href="' . esc_url( get_term_link( $cm_c ) ) . '">' . esc_html( $cm_c->name ) . '</a></li>';
 				}
 				$cm_shop_url   = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
-				$cm_shop_html .= '<li><a href="' . esc_url( $cm_shop_url ) . '">' . esc_html__( 'All products', 'corpmerch' ) . '</a></li>';
+				$cm_shop_html .= '<li><a' . ( $cm_fa['shop'] ? ' class="is-active" aria-current="page"' : '' ) . ' href="' . esc_url( $cm_shop_url ) . '">' . esc_html__( 'All products', 'corpmerch' ) . '</a></li>';
 			}
 			if ( '' !== $cm_shop_html ) :
 				?>

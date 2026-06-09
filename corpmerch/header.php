@@ -58,35 +58,47 @@ if ( '' === (string) $cm_account ) {
 }
 $cm_phone = function_exists( 'corpmerch_option' ) ? trim( (string) corpmerch_option( 'phone', '' ) ) : '';
 
-/*
- * Resolve the active product category so the sidebar rail can highlight the
- * current location and auto-expand its parent group.
- *   $cm_active_term_id — the exact term being viewed (top-level or child)
- *   $cm_active_top_id  — its top-level ancestor (the branch to open/mark)
- *   $cm_is_shop_active — true on the main Shop page ("All products")
+/**
+ * Resolve the active product-category context once per request so both the
+ * sidebar rail and the footer Shop column can highlight the current location.
+ * Returns array( 'term' => int, 'top' => int, 'shop' => bool ):
+ *   term — the exact term being viewed (top-level or child)
+ *   top  — its top-level ancestor (the branch to open/mark)
+ *   shop — true on the main Shop page ("All products")
  */
-$cm_active_term_id = 0;
-$cm_active_top_id  = 0;
-$cm_is_shop_active = false;
-
-if ( function_exists( 'is_product_category' ) && is_product_category() ) {
-	$cm_qo = get_queried_object();
-	if ( $cm_qo instanceof WP_Term ) {
-		$cm_active_term_id = (int) $cm_qo->term_id;
-		$cm_anc            = get_ancestors( $cm_qo->term_id, 'product_cat' );
-		$cm_active_top_id  = ! empty( $cm_anc ) ? (int) end( $cm_anc ) : (int) $cm_qo->term_id;
-	}
-} elseif ( function_exists( 'is_shop' ) && is_shop() ) {
-	$cm_is_shop_active = true;
-} elseif ( function_exists( 'is_product' ) && is_product() ) {
-	$cm_pterms = get_the_terms( get_the_ID(), 'product_cat' );
-	if ( $cm_pterms && ! is_wp_error( $cm_pterms ) ) {
-		$cm_pfirst         = reset( $cm_pterms );
-		$cm_active_term_id = (int) $cm_pfirst->term_id;
-		$cm_anc            = get_ancestors( $cm_pfirst->term_id, 'product_cat' );
-		$cm_active_top_id  = ! empty( $cm_anc ) ? (int) end( $cm_anc ) : (int) $cm_pfirst->term_id;
+if ( ! function_exists( 'corpmerch_active_category' ) ) {
+	function corpmerch_active_category() {
+		static $ctx = null;
+		if ( null !== $ctx ) {
+			return $ctx;
+		}
+		$ctx = array( 'term' => 0, 'top' => 0, 'shop' => false );
+		if ( function_exists( 'is_product_category' ) && is_product_category() ) {
+			$qo = get_queried_object();
+			if ( $qo instanceof WP_Term ) {
+				$ctx['term'] = (int) $qo->term_id;
+				$anc         = get_ancestors( $qo->term_id, 'product_cat' );
+				$ctx['top']  = ! empty( $anc ) ? (int) end( $anc ) : (int) $qo->term_id;
+			}
+		} elseif ( function_exists( 'is_shop' ) && is_shop() ) {
+			$ctx['shop'] = true;
+		} elseif ( function_exists( 'is_product' ) && is_product() ) {
+			$terms = get_the_terms( get_the_ID(), 'product_cat' );
+			if ( $terms && ! is_wp_error( $terms ) ) {
+				$first       = reset( $terms );
+				$ctx['term'] = (int) $first->term_id;
+				$anc         = get_ancestors( $first->term_id, 'product_cat' );
+				$ctx['top']  = ! empty( $anc ) ? (int) end( $anc ) : (int) $first->term_id;
+			}
+		}
+		return $ctx;
 	}
 }
+
+$cm_active         = corpmerch_active_category();
+$cm_active_term_id = (int) $cm_active['term'];
+$cm_active_top_id  = (int) $cm_active['top'];
+$cm_is_shop_active = (bool) $cm_active['shop'];
 
 /** Brand mark, reused in the rail head and the mobile top bar. */
 if ( ! function_exists( 'corpmerch_brand_mark' ) ) {

@@ -1921,6 +1921,9 @@ img { max-width: 100%; height: auto; display: block; }
 	box-shadow: inset 2px 0 0 var(--cm-accent-bright);
 }
 
+/* Matching highlight in the footer Shop column */
+.cm-footer__links a.is-active { color: var(--cm-accent-bright); font-weight: 700; }
+
 .cm-rail__foot {
 	margin-top: auto;
 	padding: var(--cm-space-4) var(--cm-space-5) var(--cm-space-6);
@@ -2055,7 +2058,7 @@ select:focus-visible,
     <footer class="cm-footer"><div class="cm-container">
       <div class="cm-footer__grid">
         <div class="cm-footer__brand"><div class="cm-logo">Corp<span>merch</span></div><p style="margin-top:12px;max-width:34ch;color:#a8a29e;">Corporate merchandise, fully brandable. Add your logo to apparel, bags, drinkware and more.</p></div>
-        <div class="cm-footer__col"><button class="cm-footer__heading cm-footer__acc" aria-expanded="false">Shop<svg class="cm-footer__chev" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="cm-footer__links"><li><a href="#">Apparel</a></li><li><a href="#">Bags &amp; Travel</a></li><li><a href="#">Drinkware</a></li><li><a href="#">All products</a></li></ul></div>
+        <div class="cm-footer__col"><button class="cm-footer__heading cm-footer__acc" aria-expanded="false">Shop<svg class="cm-footer__chev" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="cm-footer__links"><li><a class="is-active" aria-current="page" href="#">Apparel</a></li><li><a href="#">Bags &amp; Travel</a></li><li><a href="#">Drinkware</a></li><li><a href="#">All products</a></li></ul></div>
         <div class="cm-footer__col"><button class="cm-footer__heading cm-footer__acc" aria-expanded="false">Contact<svg class="cm-footer__chev" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="cm-footer__links"><li>123 Trade Park, Johannesburg</li><li><a href="#">0800 123 456</a></li><li><a href="#">hello@corpmerch.co</a></li></ul></div>
         <div class="cm-footer__col"><button class="cm-footer__heading cm-footer__acc" aria-expanded="false">Help &amp; Policies<svg class="cm-footer__chev" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="cm-footer__links"><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li></ul></div>
       </div>
@@ -2063,7 +2066,7 @@ select:focus-visible,
     </div></footer>
   </div>
 </div>
-<div class="pv-note">Static preview using the real <b>style.css</b>. Resize below 1024px: the dark sidebar becomes the <b>≡ drawer</b>. Note the highlighted <b>Apparel</b> active category.</div>
+<div class="pv-note">Static preview using the real <b>style.css</b>. The active <b>Apparel</b> branch is highlighted in the rail <b>and</b> the footer Shop column.</div>
 <script>
 (function(){var qs=function(s,c){return (c||document).querySelector(s)},qsa=function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
 var sb=qs('#cm-sidebar'),sc=qs('#cm-scrim'),ob=qs('#cm-menu-open'),cb=qs('#cm-rail-close'),D='(min-width:1024px)';
