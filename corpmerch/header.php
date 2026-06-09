@@ -58,6 +58,36 @@ if ( '' === (string) $cm_account ) {
 }
 $cm_phone = function_exists( 'corpmerch_option' ) ? trim( (string) corpmerch_option( 'phone', '' ) ) : '';
 
+/*
+ * Resolve the active product category so the sidebar rail can highlight the
+ * current location and auto-expand its parent group.
+ *   $cm_active_term_id — the exact term being viewed (top-level or child)
+ *   $cm_active_top_id  — its top-level ancestor (the branch to open/mark)
+ *   $cm_is_shop_active — true on the main Shop page ("All products")
+ */
+$cm_active_term_id = 0;
+$cm_active_top_id  = 0;
+$cm_is_shop_active = false;
+
+if ( function_exists( 'is_product_category' ) && is_product_category() ) {
+	$cm_qo = get_queried_object();
+	if ( $cm_qo instanceof WP_Term ) {
+		$cm_active_term_id = (int) $cm_qo->term_id;
+		$cm_anc            = get_ancestors( $cm_qo->term_id, 'product_cat' );
+		$cm_active_top_id  = ! empty( $cm_anc ) ? (int) end( $cm_anc ) : (int) $cm_qo->term_id;
+	}
+} elseif ( function_exists( 'is_shop' ) && is_shop() ) {
+	$cm_is_shop_active = true;
+} elseif ( function_exists( 'is_product' ) && is_product() ) {
+	$cm_pterms = get_the_terms( get_the_ID(), 'product_cat' );
+	if ( $cm_pterms && ! is_wp_error( $cm_pterms ) ) {
+		$cm_pfirst         = reset( $cm_pterms );
+		$cm_active_term_id = (int) $cm_pfirst->term_id;
+		$cm_anc            = get_ancestors( $cm_pfirst->term_id, 'product_cat' );
+		$cm_active_top_id  = ! empty( $cm_anc ) ? (int) end( $cm_anc ) : (int) $cm_pfirst->term_id;
+	}
+}
+
 /** Brand mark, reused in the rail head and the mobile top bar. */
 if ( ! function_exists( 'corpmerch_brand_mark' ) ) {
 	function corpmerch_brand_mark( $img_class = '' ) {
@@ -104,30 +134,35 @@ if ( ! function_exists( 'corpmerch_brand_mark' ) ) {
 			<p class="cm-rail__label"><?php esc_html_e( 'Shop by category', 'corpmerch' ); ?></p>
 			<ul class="cm-rail__list">
 				<li class="cm-rail__item">
-					<a class="cm-rail__link cm-rail__link--all" href="<?php echo esc_url( $cm_shop ); ?>">
+					<a class="cm-rail__link cm-rail__link--all<?php echo $cm_is_shop_active ? ' is-active' : ''; ?>"<?php echo $cm_is_shop_active ? ' aria-current="page"' : ''; ?> href="<?php echo esc_url( $cm_shop ); ?>">
 						<svg class="cm-rail__ico" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
 						<span><?php esc_html_e( 'All products', 'corpmerch' ); ?></span>
 					</a>
 				</li>
 				<?php foreach ( $cm_nav as $node ) :
-					$t        = $node['term'];
-					$has      = ! empty( $node['children'] );
-					$is_promo = preg_match( '/clearance|deal|sale|special/i', $t->name ); ?>
-					<li class="cm-rail__item<?php echo $is_promo ? ' is-promo' : ''; ?>">
+					$t          = $node['term'];
+					$has        = ! empty( $node['children'] );
+					$is_promo   = preg_match( '/clearance|deal|sale|special/i', $t->name );
+					$top_id     = (int) $t->term_id;
+					$grp_active = ( $cm_active_top_id === $top_id );   // current branch (top or one of its children)
+					$top_self   = ( $cm_active_term_id === $top_id );  // the top term itself is being viewed
+					?>
+					<li class="cm-rail__item<?php echo $is_promo ? ' is-promo' : ''; ?><?php echo $grp_active ? ' is-current' : ''; ?>">
 						<?php if ( $has ) : ?>
-							<button class="cm-rail__toggle" aria-expanded="false">
+							<button class="cm-rail__toggle<?php echo $grp_active ? ' is-open is-active' : ''; ?>" aria-expanded="<?php echo $grp_active ? 'true' : 'false'; ?>">
 								<span class="cm-rail__dot" aria-hidden="true"></span>
 								<span class="cm-rail__text"><?php echo esc_html( $t->name ); ?></span>
 								<svg class="cm-rail__chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 							</button>
-							<ul class="cm-rail__sub">
-								<li><a href="<?php echo esc_url( get_term_link( $t ) ); ?>"><?php printf( esc_html__( 'All %s', 'corpmerch' ), esc_html( $t->name ) ); ?></a></li>
-								<?php foreach ( $node['children'] as $kid ) : ?>
-									<li><a href="<?php echo esc_url( get_term_link( $kid ) ); ?>"><?php echo esc_html( $kid->name ); ?></a></li>
+							<ul class="cm-rail__sub<?php echo $grp_active ? ' is-open' : ''; ?>">
+								<li><a<?php echo $top_self ? ' class="is-active" aria-current="page"' : ''; ?> href="<?php echo esc_url( get_term_link( $t ) ); ?>"><?php printf( esc_html__( 'All %s', 'corpmerch' ), esc_html( $t->name ) ); ?></a></li>
+								<?php foreach ( $node['children'] as $kid ) :
+									$kid_active = ( $cm_active_term_id === (int) $kid->term_id ); ?>
+									<li><a<?php echo $kid_active ? ' class="is-active" aria-current="page"' : ''; ?> href="<?php echo esc_url( get_term_link( $kid ) ); ?>"><?php echo esc_html( $kid->name ); ?></a></li>
 								<?php endforeach; ?>
 							</ul>
 						<?php else : ?>
-							<a class="cm-rail__link" href="<?php echo esc_url( get_term_link( $t ) ); ?>">
+							<a class="cm-rail__link<?php echo $top_self ? ' is-active' : ''; ?>"<?php echo $top_self ? ' aria-current="page"' : ''; ?> href="<?php echo esc_url( get_term_link( $t ) ); ?>">
 								<span class="cm-rail__dot" aria-hidden="true"></span>
 								<span class="cm-rail__text"><?php echo esc_html( $t->name ); ?></span>
 							</a>

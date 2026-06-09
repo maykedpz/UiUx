@@ -1841,6 +1841,7 @@ img { max-width: 100%; height: auto; display: block; }
 .cm-rail__item { position: relative; }
 .cm-rail__link,
 .cm-rail__toggle {
+	position: relative;
 	display: flex;
 	align-items: center;
 	gap: 11px;
@@ -1881,6 +1882,31 @@ img { max-width: 100%; height: auto; display: block; }
 	transition: background .15s var(--cm-ease), color .15s var(--cm-ease);
 }
 .cm-rail__sub a:hover { background: var(--cm-rail-surface); color: #fff; }
+
+/* Active / current category highlight (server-rendered from header.php) */
+.cm-rail__link.is-active,
+.cm-rail__toggle.is-active { background: var(--cm-rail-surface); color: #fff; }
+.cm-rail__link.is-active .cm-rail__dot,
+.cm-rail__toggle.is-active .cm-rail__dot { opacity: 1; background: var(--cm-accent-bright); }
+.cm-rail__link.is-active::before,
+.cm-rail__toggle.is-active::before {
+	content: "";
+	position: absolute;
+	left: calc(-1 * var(--cm-space-3));
+	top: 50%;
+	transform: translateY(-50%);
+	width: 3px;
+	height: 64%;
+	border-radius: 0 3px 3px 0;
+	background: var(--cm-accent-bright);
+	box-shadow: 0 0 10px var(--cm-accent-glow);
+}
+.cm-rail__sub a.is-active {
+	color: #fff;
+	background: var(--cm-rail-surface);
+	font-weight: 600;
+	box-shadow: inset 2px 0 0 var(--cm-accent-bright);
+}
 
 .cm-rail__foot {
 	margin-top: auto;
