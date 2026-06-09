@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURORA — Hero Shots</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+:root{--violet:#7c5cff;--cyan:#2fe6e0;--lime:#9bff5b;--pink:#ff5db1;
+  --grad:linear-gradient(110deg,#7c5cff,#5b6bff 28%,#2fe6e0 60%,#9bff5b 100%);--ink:#f4f3ff;--soft:#a7a6c4}
+*{box-sizing:border-box}
+body{margin:0;background:#040409;color:var(--ink);font-family:Inter,system-ui,sans-serif}
+iframe{border:0;background:#06060c}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.page-head{text-align:center;padding:48px 20px 8px}
+.brand{font-family:"Space Grotesk";font-weight:700;letter-spacing:.2em;display:inline-flex;align-items:center;gap:10px}
+.brand .dot{width:12px;height:12px;border-radius:50%;background:var(--grad);box-shadow:0 0 18px var(--cyan)}
+.page-head p{color:#6f6e8f;font-size:.88rem;margin-top:10px}
+
+.cap{max-width:1140px;margin:46px auto 14px;padding:0 20px;display:flex;align-items:baseline;gap:12px}
+.cap h2{font-family:"Space Grotesk";font-weight:600;font-size:1.15rem;margin:0;letter-spacing:-.01em}
+.cap span{color:#6f6e8f;font-size:.82rem;font-family:"Space Grotesk"}
+
+/* a "shot" is a fixed-size stage you screenshot directly */
+.shot{position:relative;margin:0 auto;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.shot .bg{position:absolute;inset:0;z-index:0}
+.shot>*{position:relative;z-index:1}
+
+/* gradients */
+.g-violet{background:radial-gradient(70% 80% at 20% 10%,rgba(124,92,255,.55),transparent 60%),radial-gradient(60% 70% at 90% 30%,rgba(47,230,224,.4),transparent 60%),#06060c}
+.g-cyan{background:radial-gradient(70% 80% at 80% 15%,rgba(47,230,224,.5),transparent 60%),radial-gradient(60% 70% at 10% 80%,rgba(255,93,177,.34),transparent 60%),#06060c}
+.g-brand{background:radial-gradient(60% 60% at 50% 0%,rgba(124,92,255,.5),transparent 60%),radial-gradient(60% 60% at 50% 100%,rgba(47,230,224,.4),transparent 60%),#06060c}
+
+/* ---- Shot 1: desktop browser, 1200x750 ---- */
+.shot--desktop{width:1200px;height:750px}
+.browser{width:1080px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 50px 90px rgba(0,0,0,.6)}
+.browser__bar{height:46px;background:#13131b;display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:1px solid #262630}
+.dots{display:flex;gap:8px}.dots i{width:12px;height:12px;border-radius:50%}
+.dots i:nth-child(1){background:#ff5f57}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
+.url{flex:1;max-width:440px;margin:0 auto;height:28px;border-radius:30px;background:#06060c;border:1px solid #262630;
+  display:flex;align-items:center;justify-content:center;gap:7px;color:#a7a6c4;font-size:.8rem;font-family:"Space Grotesk"}
+.url svg{opacity:.6}
+.browser__view{width:1080px;height:600px;overflow:hidden;background:#06060c}
+.dsk{width:1600px;height:889px;transform:scale(.675);transform-origin:0 0}
+
+/* ---- Shot 2: phone, 760x900 ---- */
+.shot--phone{width:760px;height:920px}
+.phone{width:320px;height:660px;background:#15151d;border-radius:50px;padding:12px;box-shadow:0 44px 80px rgba(0,0,0,.65),inset 0 0 0 1px #2a2a34}
+.phone__screen{width:100%;height:100%;border-radius:38px;overflow:hidden;position:relative;background:#06060c}
+.phone__notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:104px;height:26px;background:#000;border-radius:0 0 16px 16px;z-index:3}
+.mob{width:520px;height:1042px;transform:scale(.5577);transform-origin:0 0}
+.phone-cap{position:absolute;left:60px;top:50%;transform:translateY(-50%);max-width:240px}
+.phone-cap h3{font-family:"Space Grotesk";font-size:2rem;margin:0 0 10px;letter-spacing:-.02em}
+.phone-cap h3 i{font-family:"Instrument Serif";font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.phone-cap p{color:var(--soft);font-size:.95rem;margin:0}
+@media(max-width:820px){.phone-cap{display:none}.shot--phone{width:420px}}
+
+/* ---- Shot 3: square brand, 900x900 ---- */
+.shot--square{width:900px;height:900px;flex-direction:column;gap:26px;text-align:center}
+.shot--square .lock{font-family:"Space Grotesk"}
+.shot--square .eyebrow{font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan)}
+.shot--square .big{font-family:"Space Grotesk";font-weight:600;font-size:3.4rem;letter-spacing:-.02em;margin:8px 0 0}
+.shot--square .big i{font-family:"Instrument Serif";font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.shot--square .phone{transform:scale(.92)}
+.shot--square .sub{color:var(--soft);margin-top:4px}
+
+/* frame the shot area on the page */
+.shotwrap{max-width:1240px;margin:0 auto 8px;padding:0 20px}
+.shotbox{border:1px dashed rgba(255,255,255,.12);border-radius:18px;overflow:auto;padding:14px;background:#08080f}
+.note{color:#6f6e8f;font-size:.8rem;max-width:1140px;margin:0 auto 40px;padding:0 20px}
+
+/* downscale very small screens */
+@media(max-width:1240px){.shot--desktop{transform:scale(.92)}}
+@media(max-width:1040px){.shotbox{padding:0}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="page-head">
+  <div class="brand"><span class="dot"></span>AURORA</div>
+  <p>Standalone hero shots — screenshot each framed area individually.</p>
+</div>
+
+<!-- Shot 1 -->
+<div class="cap"><h2>01 · Desktop browser</h2><span>1200 × 750</span></div>
+<div class="shotwrap"><div class="shotbox">
+  <div class="shot shot--desktop g-violet">
+    <div class="bg"></div>
+    <div class="browser">
+      <div class="browser__bar"><div class="dots"><i></i><i></i><i></i></div>
+        <div class="url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>aurora.shop</div>
+      </div>
+      <div class="browser__view"><iframe class="dsk" src="index.html" title="AURORA desktop" scrolling="no" loading="lazy"></iframe></div>
+    </div>
+  </div>
+</div></div>
+<p class="note">A clean product-page hero in browser chrome — ideal for a website header, App Store-style banner or landing thumbnail.</p>
+
+<!-- Shot 2 -->
+<div class="cap"><h2>02 · Mobile</h2><span>760 × 920</span></div>
+<div class="shotwrap"><div class="shotbox">
+  <div class="shot shot--phone g-cyan">
+    <div class="bg"></div>
+    <div class="phone-cap"><h3>Shop in your <i>pocket</i>.</h3><p>The full storefront, tuned for thumbs — cart drawer and all.</p></div>
+    <div class="phone"><div class="phone__screen"><div class="phone__notch"></div>
+      <iframe class="mob" src="index.html" title="AURORA mobile" scrolling="no" loading="lazy"></iframe>
+    </div></div>
+  </div>
+</div></div>
+<p class="note">Mobile-first storefront shot — great for social, an app teaser, or a feature row.</p>
+
+<!-- Shot 3 -->
+<div class="cap"><h2>03 · Square brand (social)</h2><span>900 × 900</span></div>
+<div class="shotwrap"><div class="shotbox">
+  <div class="shot shot--square g-brand">
+    <div class="bg"></div>
+    <div>
+      <div class="eyebrow">New collection · Winter ’26</div>
+      <div class="big">Objects of <i>light</i>.</div>
+      <div class="sub">aurora.shop</div>
+    </div>
+    <div class="phone"><div class="phone__screen"><div class="phone__notch"></div>
+      <iframe class="mob" src="index.html" title="AURORA square" scrolling="no" loading="lazy"></iframe>
+    </div></div>
+  </div>
+</div></div>
+<p class="note" style="margin-bottom:60px">Square 1:1 brand card — drop straight into Instagram / a press kit. Keep this file beside <b style="color:#a7a6c4">index.html</b> so the previews load; screenshot the dashed area of each shot at full width.</p>
+</body>
+</html>
