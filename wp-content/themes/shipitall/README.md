@@ -1,11 +1,10 @@
-# Honestly Market — WordPress theme (Phase 1: look & feel)
+# Shipitall — WordPress theme (Phase 1: look & feel)
 
 A block (FSE) theme for a South African multivendor marketplace built on
 one rule: **the price you see is the price you pay.** No fake "was"
 prices, no countdown gimmicks, no auctions.
 
-"Honestly Market" is a **placeholder brand name** — swap it before
-launch (see "Renaming the brand" below).
+Brand: **Shipitall**.
 
 ## What's built in this phase
 
@@ -47,7 +46,7 @@ dependency and one less privacy/performance cost.
   `SearchAction`) JSON-LD on the front page (`functions.php`).
   Per-product `Product`/`Offer` schema is deferred to Phase 2 — there's
   no real price/availability data to describe yet.
-- **`/llms.txt`**: served dynamically at `honestlymarket.example/llms.txt`
+- **`/llms.txt`**: served dynamically at `shipitall.example/llms.txt`
   (rewrite rule in `functions.php`), so it always reflects the live
   site name/tagline instead of going stale like a static file would.
 - **AI crawler access**: `robots.txt` explicitly allows `GPTBot`,
@@ -98,9 +97,9 @@ auctions.
 
 ## Installing / previewing
 
-1. Copy `wp-content/themes/honestly-market` into your WordPress
+1. Copy `wp-content/themes/shipitall` into your WordPress
    install's `wp-content/themes/` directory (this repo's
-   `wp-content/themes/honestly-market` path mirrors that already).
+   `wp-content/themes/shipitall` path mirrors that already).
 2. Activate it under **Appearance → Themes**.
 3. Set **Settings → General → Site Title** to your real brand name —
    the top bar wordmark and JSON-LD both read from it, nothing is
@@ -115,16 +114,7 @@ through a local WP environment such as `wp-env`, Local, or a Docker
 `wordpress` + `mysql` compose stack, with this directory mounted as
 the active theme.
 
-## Renaming the brand
-
-Search-and-replace `Honestly Market` / `honestly-market` across:
-`style.css` header, `theme.json` (`title`), `functions.php` (text
-domain, `const`/function prefixes if you want a different slug), and
-copy in `parts/header.html`'s alt text if a logo image is added later.
-The wordmark itself is pulled from **Settings → General → Site
-Title**, so that part needs no code change.
-
-## Phase 2 (backend) — not started
+## Phase 2 (backend) — in progress, see `wp-content/plugins/shipitall-marketplace`
 
 - WooCommerce install/configuration (products, cart, checkout,
   payments, orders).

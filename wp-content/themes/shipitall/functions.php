@@ -1,6 +1,6 @@
 <?php
 /**
- * Honestly Market theme setup.
+ * Shipitall theme setup.
  *
  * Phase 1 scope: block-theme plumbing, asset loading, and the
  * AI-readiness groundwork (structured data, llms.txt, AI-crawler
@@ -14,13 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const HONESTLY_MARKET_VERSION = '0.1.0';
+const SHIPITALL_VERSION = '0.1.0';
 
 /**
  * Theme setup.
  */
-function honestly_market_setup() {
-	load_theme_textdomain( 'honestly-market', get_template_directory() . '/languages' );
+function shipitall_setup() {
+	load_theme_textdomain( 'shipitall', get_template_directory() . '/languages' );
 
 	add_theme_support( 'wp-block-styles' );
 	add_theme_support( 'editor-styles' );
@@ -32,32 +32,32 @@ function honestly_market_setup() {
 	add_theme_support( 'woocommerce' );
 
 	register_block_pattern_category(
-		'honestly-market',
-		array( 'label' => __( 'Honestly Market', 'honestly-market' ) )
+		'shipitall',
+		array( 'label' => __( 'Shipitall', 'shipitall' ) )
 	);
 }
-add_action( 'after_setup_theme', 'honestly_market_setup' );
+add_action( 'after_setup_theme', 'shipitall_setup' );
 
 /**
  * Enqueue theme assets.
  */
-function honestly_market_assets() {
+function shipitall_assets() {
 	wp_enqueue_style(
-		'honestly-market-theme',
+		'shipitall-theme',
 		get_theme_file_uri( 'assets/css/theme.css' ),
 		array(),
-		HONESTLY_MARKET_VERSION
+		SHIPITALL_VERSION
 	);
 
 	wp_enqueue_script(
-		'honestly-market-header-scroll',
+		'shipitall-header-scroll',
 		get_theme_file_uri( 'assets/js/header-scroll.js' ),
 		array(),
-		HONESTLY_MARKET_VERSION,
+		SHIPITALL_VERSION,
 		true
 	);
 }
-add_action( 'wp_enqueue_scripts', 'honestly_market_assets' );
+add_action( 'wp_enqueue_scripts', 'shipitall_assets' );
 
 /**
  * ---------------------------------------------------------------
@@ -70,7 +70,7 @@ add_action( 'wp_enqueue_scripts', 'honestly_market_assets' );
  * emitting it now would mean publishing structured data for products
  * that don't exist yet.
  */
-function honestly_market_structured_data() {
+function shipitall_structured_data() {
 	if ( ! is_front_page() ) {
 		return;
 	}
@@ -101,7 +101,7 @@ function honestly_market_structured_data() {
 
 	echo '<script type="application/ld+json">' . wp_json_encode( $schema ) . '</script>' . "\n";
 }
-add_action( 'wp_head', 'honestly_market_structured_data' );
+add_action( 'wp_head', 'shipitall_structured_data' );
 
 /**
  * ---------------------------------------------------------------
@@ -114,7 +114,7 @@ add_action( 'wp_head', 'honestly_market_structured_data' );
  * products are allowed, so a future blanket "Disallow" doesn't silently
  * take them out with it.
  */
-function honestly_market_robots_txt( $output, $public ) {
+function shipitall_robots_txt( $output, $public ) {
 	if ( '1' !== (string) $public ) {
 		return $output;
 	}
@@ -130,7 +130,7 @@ function honestly_market_robots_txt( $output, $public ) {
 
 	return $output;
 }
-add_filter( 'robots_txt', 'honestly_market_robots_txt', 10, 2 );
+add_filter( 'robots_txt', 'shipitall_robots_txt', 10, 2 );
 
 /**
  * ---------------------------------------------------------------
@@ -139,19 +139,19 @@ add_filter( 'robots_txt', 'honestly_market_robots_txt', 10, 2 );
  * Served dynamically (rather than as a static file) so it always
  * reflects the live site name/tagline instead of going stale.
  */
-function honestly_market_llms_rewrite() {
-	add_rewrite_rule( '^llms\.txt$', 'index.php?honestly_llms=1', 'top' );
+function shipitall_llms_rewrite() {
+	add_rewrite_rule( '^llms\.txt$', 'index.php?shipitall_llms=1', 'top' );
 }
-add_action( 'init', 'honestly_market_llms_rewrite' );
+add_action( 'init', 'shipitall_llms_rewrite' );
 
-function honestly_market_llms_query_vars( $vars ) {
-	$vars[] = 'honestly_llms';
+function shipitall_llms_query_vars( $vars ) {
+	$vars[] = 'shipitall_llms';
 	return $vars;
 }
-add_filter( 'query_vars', 'honestly_market_llms_query_vars' );
+add_filter( 'query_vars', 'shipitall_llms_query_vars' );
 
-function honestly_market_llms_render() {
-	if ( ! get_query_var( 'honestly_llms' ) ) {
+function shipitall_llms_render() {
+	if ( ! get_query_var( 'shipitall_llms' ) ) {
 		return;
 	}
 
@@ -172,14 +172,14 @@ function honestly_market_llms_render() {
 	echo implode( "\n", $lines ) . "\n";
 	exit;
 }
-add_action( 'template_redirect', 'honestly_market_llms_render' );
+add_action( 'template_redirect', 'shipitall_llms_render' );
 
 /**
  * Flush rewrite rules once on theme activation so /llms.txt resolves
  * without requiring a manual visit to Settings > Permalinks.
  */
-function honestly_market_flush_rewrites() {
-	honestly_market_llms_rewrite();
+function shipitall_flush_rewrites() {
+	shipitall_llms_rewrite();
 	flush_rewrite_rules();
 }
-add_action( 'after_switch_theme', 'honestly_market_flush_rewrites' );
+add_action( 'after_switch_theme', 'shipitall_flush_rewrites' );

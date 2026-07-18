@@ -1,8 +1,8 @@
 <?php
 /**
  * Title: Hero — Category Rail + Marketplace Pitch
- * Slug: honestly-market/hero-category-marketplace
- * Categories: honestly-market
+ * Slug: shipitall/hero-category-marketplace
+ * Categories: shipitall
  * Block Types: core/template-part/front-page
  */
 ?>
@@ -52,7 +52,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":1,"className":"hero-heading","fontSize":"hero"} -->
-<h1 class="hero-heading has-hero-font-size">Honestly, that's the price.</h1>
+<h1 class="hero-heading has-hero-font-size">The price you see is the price you pay.</h1>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"hero-sub"} -->
@@ -66,7 +66,7 @@
 <!-- /wp:button -->
 
 <!-- wp:button {"className":"is-style-outline"} -->
-<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="#sell">Sell on Honestly Market</a></div>
+<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="#sell">Sell on Shipitall</a></div>
 <!-- /wp:button -->
 </div>
 <!-- /wp:buttons -->
