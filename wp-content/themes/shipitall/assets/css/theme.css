@@ -31,7 +31,23 @@
 	box-shadow: 0 4px 16px rgba(20, 23, 28, 0.08);
 }
 
+/* Max-width centering and flex layout here duplicate what WP's block
+   "layout" support would generate for these Group blocks — written
+   explicitly so the top bar and hero still lay out correctly even if
+   layout support or global styles isn't fully wired up. */
+.site-topbar,
+.hero-section,
+.site-footer {
+	max-width: 1400px;
+	margin-inline: auto;
+	padding-inline: var(--wp--preset--spacing--40);
+}
+
 .site-topbar__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: nowrap;
 	gap: var(--wp--preset--spacing--50);
 }
 
@@ -231,6 +247,19 @@
 	font-weight: 700;
 }
 
+/* ---------- Footer ---------- */
+.site-footer {
+	padding-top: var(--wp--preset--spacing--50);
+	padding-bottom: var(--wp--preset--spacing--50);
+	border-top: 1px solid var(--wp--preset--color--rule);
+}
+
+.footer-note {
+	font-size: var(--wp--preset--font-size--small);
+	color: var(--wp--preset--color--ink);
+	margin: 0;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
 	.site-topbar__inner {
@@ -244,10 +273,11 @@
 	}
 
 	.hero-section {
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
 	}
 
 	.category-rail {
+		min-width: 0;
 		border-right: none;
 		border-bottom: 1px solid var(--wp--preset--color--rule);
 		padding-right: 0;
@@ -256,6 +286,7 @@
 
 	.category-list {
 		display: flex;
+		min-width: 0;
 		gap: var(--wp--preset--spacing--30);
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
