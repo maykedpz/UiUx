@@ -1,0 +1,50 @@
+/* Shipitall Marketplace — frontend vendor dashboard & application form.
+   Deliberately theme-neutral: real layout/branding comes from
+   whatever active theme wraps these shortcodes. */
+
+.shipitall-vendor-application p,
+.shipitall-dashboard-settings p {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	margin: 0 0 1rem;
+	max-width: 32rem;
+}
+
+.shipitall-vendor-application input[type="text"],
+.shipitall-vendor-application textarea,
+.shipitall-dashboard-settings input[type="text"],
+.shipitall-dashboard-settings textarea {
+	padding: 0.6rem 0.75rem;
+	border: 1px solid #b9b2a0;
+	border-radius: 3px;
+	font: inherit;
+}
+
+.shipitall-dashboard-overview,
+.shipitall-dashboard-products,
+.shipitall-dashboard-orders,
+.shipitall-dashboard-settings {
+	margin-bottom: 2.5rem;
+}
+
+.shipitall-dashboard-overview ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	gap: 2rem;
+	flex-wrap: wrap;
+}
+
+.shipitall-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.shipitall-table th,
+.shipitall-table td {
+	text-align: left;
+	padding: 0.6rem 0.75rem;
+	border-bottom: 1px solid #b9b2a0;
+}
